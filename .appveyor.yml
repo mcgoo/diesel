@@ -25,8 +25,7 @@ install:
   - 7z e sqlite3.zip -y
   - set SQLITE3_LIB_DIR=%APPVEYOR_BUILD_FOLDER%
   - set PATH=%PATH%;%APPVEYOR_BUILD_FOLDER%
-  - set LIB=C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\lib.exe
-  - if defined LIB "%LIB%" /def:sqlite3.def /OUT:sqlite3.lib /machine:x64
+  - '"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\lib.exe" /def:sqlite3.def /OUT:sqlite3.lib /machine:x64'
 
 build: false
 
