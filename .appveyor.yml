@@ -3,10 +3,10 @@ version: 1.0.{build}
 # MySQL fails to link on 2015
 image: Visual Studio 2013
 
-branches:
-  only:
-    - master
-    - appveyor_nonsense
+# branches:
+#   only:
+#     - master
+#     - appveyor_nonsense
 
 services:
   - postgresql95
