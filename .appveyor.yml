@@ -15,9 +15,7 @@ cache:
 
 install:
   - curl -fsS --retry 3 --retry-connrefused -o rustup-init.exe https://win.rustup.rs/
-  # nightly is required for -Ctarget-feature=+crt-static until Rust 1.19
-  - if not defined RUSTFLAGS rustup-init -yv --default-toolchain stable --default-host %target%
-  - if defined RUSTFLAGS rustup-init -yv --default-toolchain nightly --default-host %target%
+  - rustup-init -yv --default-toolchain stable --default-host %target%
   - set PATH=%PATH%;%USERPROFILE%\.cargo\bin
   - rustc -vV
   - cargo -vV
