@@ -4,6 +4,7 @@ branches:
   only:
     - master
     - appveyor_nonsense
+    - test-postgres-mysql-vcpkg
 
 services:
   - postgresql95
