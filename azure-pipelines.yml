@@ -178,18 +178,21 @@ jobs:
     variables:
       BACKEND: sqlite
       SQLITE_DATABASE_URL: C:\test.db
-      SQLITE3_LIB_DIR: C:\sqlite
+      #SQLITE3_LIB_DIR: C:\sqlite
+      VCPKG_ROOT: c:\vcpkg
+      VCPKGRS_DYNAMIC: 1
     setup:
       - script: |
-          choco install 7zip
-          mkdir C:\sqlite
-          CD /D C:\sqlite
-          curl -fsS --retry 3 --retry-connrefused -o sqlite3.zip https://sqlite.org/2017/sqlite-dll-win64-x64-3160200.zip
-          7z e sqlite3.zip -y
-          call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-          lib /machine:x64 /def:sqlite3.def /out:sqlite3.lib
-          set PATH=%PATH%;C:\sqlite
-          echo "##vso[task.setvariable variable=PATH;]%PATH%;C:\sqlite"
+          git clone --depth 1 https://github.com/Microsoft/vcpkg c:\vcpkg
+          cd /d c:\vcpkg
+          .\bootstrap-vcpkg.bat
+          .\vcpkg install sqlite3:x64-windows
+#          curl -fsS --retry 3 --retry-connrefused -o sqlite3.zip https://sqlite.org/2017/sqlite-dll-win64-x64-3160200.zip
+#          7z e sqlite3.zip -y
+#          call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+#          lib /machine:x64 /def:sqlite3.def /out:sqlite3.lib
+          #set PATH=%PATH%;C:\sqlite
+#          echo "##vso[task.setvariable variable=PATH;]%PATH%;C:\sqlite"
         displayName: Install sqlite
 
 - template: _build/azure-pipelines-template.yml
@@ -202,12 +205,16 @@ jobs:
       PG_DATABASE_URL: postgres://postgres:password@localhost/
       PG_EXAMPLE_DATABASE_URL: postgres://postgres:password@localhost/diesel_example
       PQ_LIB_DIR: C:\Program Files\PostgreSQL\10\lib
+      VCPKG_ROOT: c:\vcpkg
+      VCPKGRS_DYNAMIC: 1
     setup:
       - script: |
-          vcpkg version
-          choco install postgresql10 --force --params '/Password:password'
-          set PATH=%PATH%;C:\Program Files\PostgreSQL\10\bin;C:\Program Files\PostgreSQL\10\lib"
-          echo "##vso[task.setvariable variable=PATH;]%PATH%;C:\Program Files\PostgreSQL\10\bin;C:\Program Files\PostgreSQL\10\lib"
+          git clone --depth 1 https://github.com/Microsoft/vcpkg c:\vcpkg
+          cd /d c:\vcpkg
+          .\bootstrap-vcpkg.bat
+          .\vcpkg install libpq:x64-windows
+          # set PATH=%PATH%;C:\Program Files\PostgreSQL\10\bin;C:\Program Files\PostgreSQL\10\lib"
+          # echo "##vso[task.setvariable variable=PATH;]%PATH%;C:\Program Files\PostgreSQL\10\bin;C:\Program Files\PostgreSQL\10\lib"
         displayName: Install postgresql
 
 - template: _build/azure-pipelines-template.yml
@@ -221,18 +228,23 @@ jobs:
       MYSQL_EXAMPLE_DATABASE_URL: mysql://root:password@localhost/diesel_example
       MYSQL_UNIT_TEST_DATABASE_URL: mysql://root:password@localhost/diesel_unit_test
       RUST_TEST_THREADS: 1
-      MYSQLCLIENT_LIB_DIR: C:\Program Files\MySQL\MySQL Server 8.0\lib
+      #MYSQLCLIENT_LIB_DIR: C:\Program Files\MySQL\MySQL Server 8.0\lib
+      VCPKG_ROOT: c:\vcpkg
+      VCPKGRS_DYNAMIC: 1
     setup:
       - script: |
-          c:\vcpkg\vcpkg.exe version
-          choco install 7zip
-          mkdir C:\mysql
-          CD /D C:\mysql
-          curl -fsS --retry 3 --retry-connrefused -o mysql.msi https://cdn.mysql.com/archives/mysql-installer/mysql-installer-community-8.0.11.0.msi
-          msiexec /q /log install.txt /i mysql.msi datadir=C:\mysql installdir=C:\mysql
-          call "C:\Program Files (x86)\MySQL\MySQL Installer for Windows\MySQLInstallerConsole.exe" community install server;8.0.11;x64:*:port=3306;rootpasswd=password;servicename=MySQL -silent
-          netsh advfirewall firewall add rule name="Allow mysql" dir=in action=allow edge=yes remoteip=any protocol=TCP localport=80,8080,3306
-          "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql" -e "create database diesel_test; create database diesel_unit_test; grant all on diesel_test.* to 'root'@localhost; grant all on diesel_unit_test.* to 'root'@localhost;" -uroot -ppassword
+          git clone --depth 1 https://github.com/Microsoft/vcpkg c:\vcpkg
+          cd /d c:\vcpkg
+          .\bootstrap-vcpkg.bat
+          .\vcpkg install libmysqlclient:x64-windows
+          # choco install 7zip
+          # mkdir C:\mysql
+          # CD /D C:\mysql
+          # curl -fsS --retry 3 --retry-connrefused -o mysql.msi https://cdn.mysql.com/archives/mysql-installer/mysql-installer-community-8.0.11.0.msi
+          # msiexec /q /log install.txt /i mysql.msi datadir=C:\mysql installdir=C:\mysql
+          # call "C:\Program Files (x86)\MySQL\MySQL Installer for Windows\MySQLInstallerConsole.exe" community install server;8.0.11;x64:*:port=3306;rootpasswd=password;servicename=MySQL -silent
+          # netsh advfirewall firewall add rule name="Allow mysql" dir=in action=allow edge=yes remoteip=any protocol=TCP localport=80,8080,3306
+          # "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql" -e "create database diesel_test; create database diesel_unit_test; grant all on diesel_test.* to 'root'@localhost; grant all on diesel_unit_test.* to 'root'@localhost;" -uroot -ppassword
         displayName: Install mysql
 
 - job: COMPILE_TESTS
