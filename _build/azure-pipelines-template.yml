@@ -23,6 +23,8 @@ jobs:
   - bash: |
       echo $PATH
       echo $MYSQLCLIENT_LIB_DIR
+      echo VCPKG_ROOT=$VCPKG_ROOT
+      echo VCPKGRS_DYNAMIC=$VCPKGRS_DYNAMIC
     displayName: Sanity check path
   - bash: |
       if [[ "$RUSTUP_TOOLCHAIN" == nightly* ]]; then
