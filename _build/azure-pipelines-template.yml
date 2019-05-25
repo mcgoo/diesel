@@ -27,6 +27,13 @@ jobs:
       echo VCPKGRS_DYNAMIC=$VCPKGRS_DYNAMIC
     displayName: Sanity check path
   - bash: |
+      echo VCPKG_ROOT=$VCPKG_ROOT
+      echo VCPKGRS_DYNAMIC=$VCPKGRS_DYNAMIC
+      ls -l /
+      echo foo
+      ls -l /mnt/c/vcpkg
+      echo foo2
+      ls -l /c/vcpkg
       if [[ "$RUSTUP_TOOLCHAIN" == nightly* ]]; then
         (cd diesel && cargo test --no-default-features --features "unstable extras $BACKEND")
       else
@@ -35,13 +42,6 @@ jobs:
       (cd diesel && cargo test --no-default-features --features "extras with-deprecated $BACKEND")
     displayName: Test diesel
   - bash: |
-      echo VCPKG_ROOT=$VCPKG_ROOT
-      echo VCPKGRS_DYNAMIC=$VCPKGRS_DYNAMIC
-      ls -l /
-      echo foo
-      ls -l /mnt/c/vcpkg
-      echo foo2
-      ls -l /c/vcpkg
       (cd diesel_derives && cargo test --features "diesel/$BACKEND") &&
       if [[ "$RUSTUP_TOOLCHAIN" == nightly* ]]; then
         (cd diesel_derives && cargo test --features "diesel/unstable diesel/$BACKEND")
