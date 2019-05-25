@@ -204,7 +204,8 @@ jobs:
           dir c:\vcpkg
           git clone --depth 1 https://github.com/Microsoft/vcpkg c:\vcpkg
           cd /d c:\vcpkg
-          call .\bootstrap-vcpkg.bat
+          IF NOT EXIST vcpkg.exe call .\bootstrap-vcpkg.bat
+          .\vcpkg list
           .\vcpkg install libpq:x64-windows
           echo "##vso[task.setvariable variable=VCPKG_ROOT;]C:\vcpkg
           echo "##vso[task.setvariable variable=VCPKGRS_DYNAMIC;]1
