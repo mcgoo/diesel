@@ -10,10 +10,10 @@ jobs:
     matrix:
       stable:
         rustup_toolchain: stable
-      beta:
-        rustup_toolchain: beta
-      nightly:
-        rustup_toolchain: nightly
+      # beta:
+      #   rustup_toolchain: beta
+      # nightly:
+      #   rustup_toolchain: nightly
   steps:
   - ${{ parameters.setup }}
   - template: install-rust.yml

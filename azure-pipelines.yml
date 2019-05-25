@@ -170,24 +170,24 @@ jobs:
 #           "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql" -e "create database diesel_test; create database diesel_unit_test; grant all on diesel_test.* to 'root'@localhost; grant all on diesel_unit_test.* to 'root'@localhost;" -uroot -ppassword
 #         displayName: Install mysql
 
-- template: _build/azure-pipelines-template.yml
-  parameters:
-    name: Windows_sqlite_vcpkg
-    displayName: Windows SQLite from vcpkg
-    vmImage: vs2017-win2016
-    variables:
-      BACKEND: sqlite
-      SQLITE_DATABASE_URL: C:\test.db
-      #SQLITE3_LIB_DIR: C:\sqlite
-    setup:
-      - script: |
-          git clone --depth 1 https://github.com/Microsoft/vcpkg c:\vcpkg
-          cd /d c:\vcpkg
-          call .\bootstrap-vcpkg.bat
-          .\vcpkg install sqlite3:x64-windows
-          echo "##vso[task.setvariable variable=VCPKG_ROOT;]C:\vcpkg
-          echo "##vso[task.setvariable variable=VCPKGRS_DYNAMIC;]1
-        displayName: Install sqlite
+# - template: _build/azure-pipelines-template.yml
+#   parameters:
+#     name: Windows_sqlite_vcpkg
+#     displayName: Windows SQLite from vcpkg
+#     vmImage: vs2017-win2016
+#     variables:
+#       BACKEND: sqlite
+#       SQLITE_DATABASE_URL: C:\test.db
+#       #SQLITE3_LIB_DIR: C:\sqlite
+#     setup:
+#       - script: |
+#           git clone --depth 1 https://github.com/Microsoft/vcpkg c:\vcpkg
+#           cd /d c:\vcpkg
+#           call .\bootstrap-vcpkg.bat
+#           .\vcpkg install sqlite3:x64-windows
+#           echo "##vso[task.setvariable variable=VCPKG_ROOT;]C:\vcpkg
+#           echo "##vso[task.setvariable variable=VCPKGRS_DYNAMIC;]1
+#         displayName: Install sqlite
 
 - template: _build/azure-pipelines-template.yml
   parameters:
@@ -201,6 +201,7 @@ jobs:
       PQ_LIB_DIR: C:\Program Files\PostgreSQL\10\lib
     setup:
       - script: |
+          dir c:\vcpkg
           git clone --depth 1 https://github.com/Microsoft/vcpkg c:\vcpkg
           cd /d c:\vcpkg
           call .\bootstrap-vcpkg.bat
@@ -211,113 +212,113 @@ jobs:
 #          echo "##vso[task.setvariable variable=PATH;]%PATH%;C:\Program Files\PostgreSQL\10\bin;C:\Program Files\PostgreSQL\10\lib"
         displayName: Install postgresql
 
-- template: _build/azure-pipelines-template.yml
-  parameters:
-    name: Windows_mysql_vcpkg
-    displayName: Windows MySQL from vcpkg
-    vmImage: vs2017-win2016
-    variables:
-      BACKEND: mysql
-      MYSQL_DATABASE_URL: mysql://root:password@localhost/diesel_test
-      MYSQL_EXAMPLE_DATABASE_URL: mysql://root:password@localhost/diesel_example
-      MYSQL_UNIT_TEST_DATABASE_URL: mysql://root:password@localhost/diesel_unit_test
-      RUST_TEST_THREADS: 1
-      # MYSQLCLIENT_LIB_DIR: C:\Program Files\MySQL\MySQL Server 8.0\lib
-    setup:
-      - script: |
-          git clone --depth 1 https://github.com/Microsoft/vcpkg c:\vcpkg
-          cd /d c:\vcpkg
-          call .\bootstrap-vcpkg.bat
-          .\vcpkg install libmysql:x64-windows
-          echo "##vso[task.setvariable variable=VCPKG_ROOT;]C:\vcpkg
-          echo "##vso[task.setvariable variable=VCPKGRS_DYNAMIC;]1
-# choco install 7zip
-# mkdir C:\mysql
-# CD /D C:\mysql
-# curl -fsS --retry 3 --retry-connrefused -o mysql.msi https://cdn.mysql.com/archives/mysql-installer/mysql-installer-community-8.0.11.0.msi
-# msiexec /q /log install.txt /i mysql.msi datadir=C:\mysql installdir=C:\mysql
-# call "C:\Program Files (x86)\MySQL\MySQL Installer for Windows\MySQLInstallerConsole.exe" community install server;8.0.11;x64:*:port=3306;rootpasswd=password;servicename=MySQL -silent
-# netsh advfirewall firewall add rule name="Allow mysql" dir=in action=allow edge=yes remoteip=any protocol=TCP localport=80,8080,3306
-# "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql" -e "create database diesel_test; create database diesel_unit_test; grant all on diesel_test.* to 'root'@localhost; grant all on diesel_unit_test.* to 'root'@localhost;" -uroot -ppassword
-        displayName: Install mysql
+# - template: _build/azure-pipelines-template.yml
+#   parameters:
+#     name: Windows_mysql_vcpkg
+#     displayName: Windows MySQL from vcpkg
+#     vmImage: vs2017-win2016
+#     variables:
+#       BACKEND: mysql
+#       MYSQL_DATABASE_URL: mysql://root:password@localhost/diesel_test
+#       MYSQL_EXAMPLE_DATABASE_URL: mysql://root:password@localhost/diesel_example
+#       MYSQL_UNIT_TEST_DATABASE_URL: mysql://root:password@localhost/diesel_unit_test
+#       RUST_TEST_THREADS: 1
+#       # MYSQLCLIENT_LIB_DIR: C:\Program Files\MySQL\MySQL Server 8.0\lib
+#     setup:
+#       - script: |
+#           git clone --depth 1 https://github.com/Microsoft/vcpkg c:\vcpkg
+#           cd /d c:\vcpkg
+#           call .\bootstrap-vcpkg.bat
+#           .\vcpkg install libmysql:x64-windows
+#           echo "##vso[task.setvariable variable=VCPKG_ROOT;]C:\vcpkg
+#           echo "##vso[task.setvariable variable=VCPKGRS_DYNAMIC;]1
+# # choco install 7zip
+# # mkdir C:\mysql
+# # CD /D C:\mysql
+# # curl -fsS --retry 3 --retry-connrefused -o mysql.msi https://cdn.mysql.com/archives/mysql-installer/mysql-installer-community-8.0.11.0.msi
+# # msiexec /q /log install.txt /i mysql.msi datadir=C:\mysql installdir=C:\mysql
+# # call "C:\Program Files (x86)\MySQL\MySQL Installer for Windows\MySQLInstallerConsole.exe" community install server;8.0.11;x64:*:port=3306;rootpasswd=password;servicename=MySQL -silent
+# # netsh advfirewall firewall add rule name="Allow mysql" dir=in action=allow edge=yes remoteip=any protocol=TCP localport=80,8080,3306
+# # "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql" -e "create database diesel_test; create database diesel_unit_test; grant all on diesel_test.* to 'root'@localhost; grant all on diesel_unit_test.* to 'root'@localhost;" -uroot -ppassword
+#         displayName: Install mysql
 
-- job: COMPILE_TESTS
-  displayName: Compiletests
-  pool:
-    vmImage: ubuntu-16.04
-  steps:
-    - template: _build/install-rust.yml
-      parameters:
-        platform: Linux
-        rust_version: nightly-2019-02-26
-    - bash: |
-        sudo apt-get update &&
-        sudo apt-get -y install libsqlite3-dev libpq-dev libmysqlclient-dev
-      displayName: Install build dependencies
-    - bash: |
-        (cd diesel_compile_tests && cargo test)
-      displayName: Run compile tests
+# - job: COMPILE_TESTS
+#   displayName: Compiletests
+#   pool:
+#     vmImage: ubuntu-16.04
+#   steps:
+#     - template: _build/install-rust.yml
+#       parameters:
+#         platform: Linux
+#         rust_version: nightly-2019-02-26
+#     - bash: |
+#         sudo apt-get update &&
+#         sudo apt-get -y install libsqlite3-dev libpq-dev libmysqlclient-dev
+#       displayName: Install build dependencies
+#     - bash: |
+#         (cd diesel_compile_tests && cargo test)
+#       displayName: Run compile tests
 
-- job: RUSTFMT_AND_CLIPPY
-  displayName: Check rustfmt style && run clippy
-  pool:
-    vmImage: ubuntu-16.04
-  steps:
-    - template: _build/install-rust.yml
-      parameters:
-        platform: Linux
-        rust_version: 1.34.0
-    - bash: |
-        sudo apt-get update &&
-        sudo apt-get -y install libsqlite3-dev libpq-dev libmysqlclient-dev
-      displayName: Install build dependencies
-    - bash: |
-        rustup component add rustfmt
-      displayName: Install rustfmt
-    - bash: |
-        rustup component add clippy
-      displayName: Install clippy
-    - bash: |
-        cargo clippy
-      displayName: Run clippy
-    - bash: |
-        cargo fmt --all -- --check
-      displayName: Check style
+# - job: RUSTFMT_AND_CLIPPY
+#   displayName: Check rustfmt style && run clippy
+#   pool:
+#     vmImage: ubuntu-16.04
+#   steps:
+#     - template: _build/install-rust.yml
+#       parameters:
+#         platform: Linux
+#         rust_version: 1.34.0
+#     - bash: |
+#         sudo apt-get update &&
+#         sudo apt-get -y install libsqlite3-dev libpq-dev libmysqlclient-dev
+#       displayName: Install build dependencies
+#     - bash: |
+#         rustup component add rustfmt
+#       displayName: Install rustfmt
+#     - bash: |
+#         rustup component add clippy
+#       displayName: Install clippy
+#     - bash: |
+#         cargo clippy
+#       displayName: Run clippy
+#     - bash: |
+#         cargo fmt --all -- --check
+#       displayName: Check style
 
-- job: SQLITE_BUNDLED
-  displayName: Check sqlite bundled
-  pool:
-    vmImage: ubuntu-16.04
-  steps:
-    - template: _build/install-rust.yml
-      parameters:
-        platform: Linux
-        rust_version: stable
-    - bash: |
-        sudo apt-get update &&
-        sudo apt-get -y install sqlite3 libsqlite3-dev
-    - bash: |
-        (cd diesel_cli && cargo test --no-default-features --features "sqlite-bundled")
-      env:
-        SQLITE_DATABASE_URL: /tmp/test.db
-      displayName: Check sqlite bundled
+# - job: SQLITE_BUNDLED
+#   displayName: Check sqlite bundled
+#   pool:
+#     vmImage: ubuntu-16.04
+#   steps:
+#     - template: _build/install-rust.yml
+#       parameters:
+#         platform: Linux
+#         rust_version: stable
+#     - bash: |
+#         sudo apt-get update &&
+#         sudo apt-get -y install sqlite3 libsqlite3-dev
+#     - bash: |
+#         (cd diesel_cli && cargo test --no-default-features --features "sqlite-bundled")
+#       env:
+#         SQLITE_DATABASE_URL: /tmp/test.db
+#       displayName: Check sqlite bundled
 
-- job: MINIMAL_RUST_VERSION
-  displayName: Check minimal supported rust version
-  pool:
-    vmImage: ubuntu-16.04
-  steps:
-    - template: _build/install-rust.yml
-      parameters:
-        platform: Linux
-        rust_version: 1.34.0
-    - bash: |
-        sudo apt-get update &&
-        sudo apt-get -y install libsqlite3-dev libpq-dev libmysqlclient-dev
-      displayName: Install build dependencies
-    - bash: |
-        cargo check --all
-      displayName: Check building with rust 1.34.0
+# - job: MINIMAL_RUST_VERSION
+#   displayName: Check minimal supported rust version
+#   pool:
+#     vmImage: ubuntu-16.04
+#   steps:
+#     - template: _build/install-rust.yml
+#       parameters:
+#         platform: Linux
+#         rust_version: 1.34.0
+#     - bash: |
+#         sudo apt-get update &&
+#         sudo apt-get -y install libsqlite3-dev libpq-dev libmysqlclient-dev
+#       displayName: Install build dependencies
+#     - bash: |
+#         cargo check --all
+#       displayName: Check building with rust 1.34.0
 # - job: COMPILE_TESTS
 #   displayName: Compiletests
 #   pool:
