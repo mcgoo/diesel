@@ -207,6 +207,7 @@ jobs:
           IF NOT EXIST vcpkg.exe call .\bootstrap-vcpkg.bat
           .\vcpkg list
           .\vcpkg install libpq:x64-windows
+          .\vcpkg list
           echo "##vso[task.setvariable variable=VCPKG_ROOT;]C:\vcpkg
           echo "##vso[task.setvariable variable=VCPKGRS_DYNAMIC;]1
 #          set PATH=%PATH%;C:\Program Files\PostgreSQL\10\bin;C:\Program Files\PostgreSQL\10\lib"
