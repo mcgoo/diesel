@@ -29,11 +29,8 @@ jobs:
   - bash: |
       echo VCPKG_ROOT=$VCPKG_ROOT
       echo VCPKGRS_DYNAMIC=$VCPKGRS_DYNAMIC
-      ls -l /
-      echo foo
-      ls -l /mnt/c/vcpkg
-      echo foo2
-      ls -l /c/vcpkg
+      echo About to vcpkg list
+      ./vcpkg.exe list      
       if [[ "$RUSTUP_TOOLCHAIN" == nightly* ]]; then
         (cd diesel && cargo test --no-default-features --features "unstable extras $BACKEND")
       else
