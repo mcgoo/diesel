@@ -198,7 +198,7 @@ jobs:
       BACKEND: postgres
       PG_DATABASE_URL: postgres://postgres:password@localhost/
       PG_EXAMPLE_DATABASE_URL: postgres://postgres:password@localhost/diesel_example
-      PQ_LIB_DIR: C:\Program Files\PostgreSQL\10\lib
+#      PQ_LIB_DIR: C:\Program Files\PostgreSQL\10\lib
     setup:
       - script: |
           dir c:\vcpkg
